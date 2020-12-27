@@ -1,6 +1,6 @@
 "use strict"
 const { extname } = require("path")
-const { readdir, readFile, writeFile } = require("fs").promises
+const { readdir, readFile, writeFile, unlink } = require("fs").promises
 
 exports.fetchAll = async () => {
   const files = (await readdir(__dirname))
@@ -31,3 +31,9 @@ exports.update = async (id, update) => {
     err => err.code === "ENOENT" ? null : Promise.reject(err)
   )
 }
+
+exports.remove =  id => unlink(`${__dirname}/${id}.json`)
+  .then(
+    () => id,
+    err => err.code === "ENOENT" ? null : Promise.reject(err)
+  )
