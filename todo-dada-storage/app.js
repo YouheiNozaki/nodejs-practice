@@ -34,7 +34,7 @@ function completedHandler(completed) {
         if (todo) {
           return res.json(todo)
         }
-        const err = new Error('TODO not found')
+        const err = new Error('ToDo not found')
         err.statusCode = 404
         next(err)
       }, next)
@@ -49,7 +49,7 @@ app.delete('/api/todos/:id', (req, res, next) =>
     if (id !== null) {
       return res.status(204).end()
     }
-    const err = new Error('Todo not found')
+    const err = new Error('ToDo not found')
     err.statusCode = 404
     next(err)
   }, next)
