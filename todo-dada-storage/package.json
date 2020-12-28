@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "file-system": "node app"
+    "file-system": "node app",
+    "sqlite": "node app"
   },
   "keywords": [],
   "author": "",
