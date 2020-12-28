@@ -72,4 +72,51 @@ describe("app", () => {
       })
     })
   })
+  describe('POST /api/todos', () => {
+    it(
+      'パラメータで指定したタイトルを引数にcreate()を実行し、結果を返す',
+      async () => {
+        sinon.stub(fileSystem, "create").resolves()
+
+        const res = await chai.request(app)
+          .post('/api/todos')
+          .send({ title: "ネーム" })
+
+        assert.strictEqual(res.status, 201)
+        assert.strictEqual(res.body.title, "ネーム")
+        assert.strictEqual(res.body.completed, false)
+        assert.calledWith(fileSystem.create, res.body)
+      }
+    )
+    it(
+      'パラメータにタイトルが指定されていない場合、400エラーを返す',
+      async () => {
+        sinon.spy(fileSystem, "create")
+
+        for ( const title of ["", undefined]) {
+          const res = await chai.request(app)
+            .post('/api/todos')
+            .send({ title })
+
+          assert.strictEqual(res.status, 400)
+          assert.deepEqual(res.body, { error: "title is required" })
+
+          assert.notCalled(fileSystem.create)
+        }
+      }
+    )
+    it(
+      'create()が失敗したらエラーを返す',
+      async () => {
+        sinon.stub(fileSystem, "create").rejects(new Error('create()失敗'))
+
+        const res = await chai.request(app)
+          .post('/api/todos')
+          .send({ title: "ネーム" })
+
+          assert.strictEqual(res.status, 500)
+          assert.deepEqual(res.body, { error: "create()失敗" })
+      }
+    )
+  })
 })

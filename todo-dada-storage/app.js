@@ -18,7 +18,7 @@ app.get("/api/todos", (req, res, next) => {
 app.post("/api/todos", (req, res, next) => {
   const { title } = req.body
   if (typeof title !== "string" || !title) {
-    const err = new Error(' title is required')
+    const err = new Error('title is required')
     err.statusCode = 400
     return next(err)
   }
